@@ -1,51 +1,40 @@
 fs = require "fs"
 
-wav = require "wav"
+express = require "express"
+app = express()
+gulp = require "./gulpfile"
+sequence = require "run-sequence"
+path = require 'path'
 
-Speaker = require "speaker"
-speaker = new Speaker
+Bell = new (require "./Bell")
+Bell.getFileList()
 
-# file = './music/JR-SH1-1.wav'
-# file = './music/shinjuku12.mp3'
+console.log Bell.fileList
 
-fs.readdir './music', (err, files)->
-  throw err if err
+static_base_path = path.join __dirname, 'www'
+app.use express.static static_base_path
 
-  fileList = []
-  files
-    .filter (file)->
-      return /.*\.(wav|wave)$/.test file
-    .forEach (file)->
-      fileList.push file
-  console.log fileList
+sequence "build", ->
 
-return
+app.get "/start", (req, res)->
+  console.log Bell.getFile(0)
+  Bell.play Bell.getFile(0)
+  res.json
+    status: 1
+    result: "success"
 
+app.get "/stop", (req, res)->
+  Bell.stop()
+  res.json
+    status: 1
+    result: "success"
 
-fileDecode = file.split(".")
-fileLength = fileDecode.length
-if fileLength == 0
-  console.error "file type do not understand"
+app.get "/list", (req, res)->
+  Bell.getFileList (fileList)->
+    res.json fileList
+
+app.get "*", (req, res)->
+  res.sendfile path.join static_base_path, "index.html"
   return
-fileType = fileDecode[fileDecode.length-1]
-
-stream = fs.createReadStream './music/JR-SH1-1.wav'
-
-switch (fileType)
-  when "wav", "wave"
-    stream = stream
-      .pipe new wav.Reader
-      .pipe speaker
-  when "mp3"
-    console.error "mp3 is not surpported"
-    return
-    # stream
-    #   .pipe new lame.Decoder
-    #   .pipe new Speaker
-  else
-    console.error "undefined file type:", fileType
-
-setTimeout ->
-  console.log "close"
-  stream.close()
-, 1000
+server = app.listen 1451, ->
+  console.log server.address()

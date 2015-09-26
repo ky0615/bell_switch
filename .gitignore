@@ -40,9 +40,22 @@ node_modules
 # Linux trash folder which might appear on any partition or disk
 .Trash-*
 
+
+### Bower ###
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
+
+
+### Sass ###
+.sass-cache
+*.css.map
+
+
 ### This project ###
 
 music/*
 !music/.gitkeep
-
+www/
 
