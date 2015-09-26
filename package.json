@@ -1,0 +1,19 @@
+{
+  "name": "bell_switch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.coffee",
+  "repository": {
+    "type": "git",
+    "url": "https://git.temp.ws/tdufe/bell_switch.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Koutarou Yabe <idolm@ster.pw>",
+  "license": "MIT",
+  "dependencies": {
+    "speaker": "^0.2.6",
+    "wav": "^1.0.0"
+  }
+}
