@@ -1,38 +1,29 @@
 fs = require "fs"
 path = require 'path'
 
-wav = require "wav"
-Speaker = require "speaker"
+exec = require('child_process').exec
+spawn = require('child_process').spawn
+
+platform = process.platform
 
 class Bell
 
-  stream: null
   fileList: []
-  wavDecoder: new wav.Reader
-  speaker: new Speaker
+  stream: null
 
-  start: ->
-    console.log "start"
+  nowBellId: 0
 
   play: (file)->
     @stop() if @stream
-
-    @wavDecoder = new wav.Reader
-    @speaker = new Speaker
-
-    @stream = fs
-      .createReadStream file
-      .pipe @wavDecoder
-      .pipe @speaker
-    return @stream
+    if /^darwin/.test platform
+      @stream = exec "afplay " + file
+    else
+      @stream = exec "aplay -l0 " + file
 
   stop: ()->
     unless @stream
       return
-    # @stream.pause()
-    # @stream.stop()
-    @stream.close()
-    # @stream.end()
+    exec "kill " + @stream.pid
     @stream = null
 
   getFileList: (cb)=>

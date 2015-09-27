@@ -13,6 +13,7 @@
   "author": "Koutarou Yabe <idolm@ster.pw>",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.14.0",
     "coffee-script": "^1.8.0",
     "colors": "^1.0.2",
     "express": "^4.10.6",

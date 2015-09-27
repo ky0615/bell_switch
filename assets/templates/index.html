@@ -1,5 +1,43 @@
-<div id="main">
-  <header id="header" class="">
-    <h1>bell was created!</h1>
-  </header>
+<div id="main" class="page-header">
+  <div class="row">
+    <header id="header" class="">
+      <h1>発車ベルスイッチ　コントロールパネル</h1>
+    </header>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="bs-docs-section">
+        <h1 class="page-header">再生するメロディを選択</h1>
+        <div class="btn-group text-center" role="group">
+          <button type="button" class="btn btn-default" ng-click="reloadBellList()">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            更新
+          </button>
+          <button type="button" class="btn btn-default" ng-click="bellRandomSelect()">
+            <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
+            ランダム選曲
+          </button>
+        </div>
+      </div>
+      <div class="list-group">
+        <li class="list-group-item bell-list" ng-repeat="(key, name) in bellFiles" ng-click="setBell(key)">
+          <span class="glyphicon" ng-class="(nowBellId == key)?'glyphicon-play-circle': 'glyphicon-headphones'" aria-hidden="true"></span>
+          {{name}}
+        </li>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="bs-docs-section">
+        <h1 class="page-header">操作盤</h1>
+        <button type="button" class="btn btn-primary" ng-click="clickPlayBell()">
+        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+        メロディ再生
+        </button>
+        <button type="button" class="btn btn-primary" ng-click="clickStopBell()">
+        <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+        メロディ停止
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

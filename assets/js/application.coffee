@@ -1,4 +1,4 @@
-angular.module "application", ["ngRoute", "templates", "ui.bootstrap", "ngMockE2E"]
+angular.module "application", ["ngRoute", "templates", "ui.bootstrap"]
   .config ($routeProvider, $locationProvider) ->
     $locationProvider.html5Mode true
     $routeProvider
