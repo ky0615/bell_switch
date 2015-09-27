@@ -18,6 +18,7 @@
             ランダム選曲
           </button>
         </div>
+      <p>選択中のメロディ: {{nowPlayingTitle}}</p>
       </div>
       <div class="list-group">
         <li class="list-group-item bell-list" ng-repeat="(key, name) in bellFiles" ng-click="setBell(key)">

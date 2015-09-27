@@ -3,8 +3,11 @@ angular.module "application"
     $scope.bellFiles = []
     $scope.nowBellId = 0
 
+    $scope.nowPlayingTitle = ""
+
     $scope.setBell = (key)->
       $scope.nowBellId = key
+      $scope.nowPlayingTitle = $scope.bellFiles[key]
       $http.post "/setbellid", id: key
         .success (res, status)->
           console.log res
@@ -20,6 +23,7 @@ angular.module "application"
       $http.get "/status"
         .success (res, status)->
           $scope.nowBellId = res.bell_id
+          $scope.nowPlayingTitle = $scope.bellFiles[$scope.nowBellId]
         .error (res, status)->
 
     $scope.clickPlayBell = ->
