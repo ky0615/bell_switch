@@ -5,9 +5,47 @@ Raspberry Pi を用いて発車メロディーを鳴らすための装置
 
 ## 説明
 GPIOでスイッチの検知を行い、それによってwavファイルを再生するだけです。  
-内部でWeb Consoleを立てるので、そこから曲を切り替えられます。  
+内部でWeb Consoleを立てているので、そこから曲を切り替えられます。  
 
 今のところは`./music`内のwavファイルを無慈悲に再生することしか出来ません。
+
+## デプロイ
+MacOSX(darwin)とLinuxのみ対応です。  
+
+Windowsでは動かないと思います。  
+ALSAを対応すれば、WebConsoleだけは動くかも。
+
+### 必要言語
+Node.js v4.1.1
+
+### 普通に動かす場合
+
+```
+npm install --production
+npm install -g coffee-script
+coffee app.coffee
+```
+
+### デーモン化する場合
+
+```
+npm install -g pm2
+pm2 start app.coffee
+```
+
+## Develop
+
+```
+npm install
+coffee build.coffee
+```
+
+build.coffeeを実行すると、フロント側のassetsが自動でビルドされます。  
+app.coffeeも実行しないとバックエンドは動かないので注意です。
+
+## TODO
+- GPIOの値を読み取る
+- ~~WebConsoleの作成~~
 
 ## License
 
