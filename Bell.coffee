@@ -18,12 +18,16 @@ class Bell
     if /^darwin/.test platform
       @stream = exec "afplay " + file
     else
-      @stream = exec "aplay -l0 " + file
+      @stream = spawn "aplay", [file]
 
   stop: ()->
     unless @stream
       return
-    exec "kill " + @stream.pid
+    if /^darwin/.test platform
+      exec "kill " + @stream.pid
+    else
+      @stream.kill "SIGTERM"
+      @stream.emit "stop"
     @stream = null
 
   getFileList: (cb)=>
