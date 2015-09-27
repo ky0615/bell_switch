@@ -44,8 +44,6 @@
     "include-all": "^0.1.6",
     "main-bower-files": "^2.4.0",
     "run-sequence": "^1.0.1",
-    "socket.io": "^1.3.7",
-    "speaker": "^0.2.6",
-    "wav": "^1.0.0"
+    "socket.io": "^1.3.7"
   }
 }
