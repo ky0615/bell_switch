@@ -18,7 +18,7 @@ class Bell
     if /^darwin/.test platform
       @stream = exec "afplay " + file
     else
-      @stream = spawn "aplay", [file]
+      @stream = spawn "aplay", [0..10].map -> file
 
   stop: ()->
     unless @stream
