@@ -34,11 +34,6 @@ app.get "/status", (req, res)->
     bell_id: Bell.nowBellId
 
 app.post "/setbellid", (req, res)->
-  unless req.body?.id
-    res.json
-      status: -1
-      bell_id: Bell.nowBellId
-    return
   Bell.nowBellId = req.body.id
   res.json
     status: 1
