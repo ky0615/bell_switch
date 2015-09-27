@@ -1,12 +1,11 @@
 fs = require "fs"
 
+path = require 'path'
+
 express = require "express"
 app = express()
 bodyParser = require "body-parser"
 app.use bodyParser()
-gulp = require "./gulpfile"
-sequence = require "run-sequence"
-path = require 'path'
 
 Bell = new (require "./Bell")
 Bell.getFileList (files)->
@@ -15,9 +14,6 @@ Bell.getFileList (files)->
 static_base_path = path.join __dirname, 'www'
 app.use express.static static_base_path
 
-sequence "build", ->
-  console.log "gulp build was successful"
-  sequence "watch:assets", ->
 
 app.get "/start", (req, res)->
   Bell.play Bell.getFile Bell.nowBellId
