@@ -16,7 +16,7 @@ class Bell
   play: (file)->
     @stop() if @stream
     if /^darwin/.test platform
-      @stream = exec "afplay " + file
+      @stream = spawn "afplay", [file]
     else
       @stream = spawn "aplay", [0..10].map -> file
 
