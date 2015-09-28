@@ -9,7 +9,7 @@ app.use bodyParser()
 
 Bell = new (require "./Bell")
 Bell.getFileList (files)->
-  console.log files
+  # console.log files
 
 static_base_path = path.join __dirname, 'www'
 app.use express.static static_base_path
@@ -45,3 +45,14 @@ app.get "*", (req, res)->
   return
 server = app.listen 1451, ->
   console.log server.address()
+
+if /^arm/.test process.arch
+  pin = 7
+  console.log "enable the raspberry pi's gpio"
+  console.log "read pin is " + pin
+  gpio = require "rpi-gpio"
+  gpio.setup pin, gpio.DIR_IN, ->
+    gpio.read pin, (err, value)->
+      console.log "value is " + value
+else
+  console.log "This compuer is not Raspberry pi"
