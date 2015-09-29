@@ -59,15 +59,16 @@ if /^arm/.test process.arch
     console.log err if err
     console.log "input value: " + value
     nowValue = value
-    switch nowValue
-      when 0
-        Bell.stop()
-        console.log "stop the music by gpio"
-      when 1
-        Bell.play Bell.getFile Bell.nowBellId
-        console.log "start the music by gpio"
-      else
-        console.log "input the GPIO pin#{pin} parameter is out range[0,1]"
-
+    setInterval ->
+      switch nowValue
+        when 0
+          Bell.stop()
+          console.log "stop the music by gpio"
+        when 1
+          Bell.play Bell.getFile Bell.nowBellId
+          console.log "start the music by gpio"
+        else
+          console.log "input the GPIO pin#{pin} parameter is out range[0,1]"
+    , 200
 else
   console.log "This computer is not Raspberry pi"
