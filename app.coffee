@@ -59,7 +59,7 @@ if /^arm/.test process.arch
     console.log err if err
     nowValue = value
   setInterval ->
-    if nowValue is value
+    if nowValue is lastValue
       return
     lastValue = nowValue
     switch nowValue
