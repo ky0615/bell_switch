@@ -46,13 +46,28 @@ app.get "*", (req, res)->
 server = app.listen 1451, ->
   console.log server.address()
 
+lastValue = 0
+nowValue = 0
+
 if /^arm/.test process.arch
-  pin = 7
+  pin = 21
   console.log "enable the raspberry pi's gpio"
   console.log "read pin is " + pin
-  gpio = require "rpi-gpio"
-  gpio.setup pin, gpio.DIR_IN, ->
-    gpio.read pin, (err, value)->
-      console.log "value is " + value
+  gpio = require("onoff").Gpio
+  button = new gpio pin, 'in', 'both'
+  button.watch (err, value)->
+    console.log err if err
+    console.log "input value: " + value
+    nowValue = value
+    switch nowValue
+      when 0
+        Bell.stop()
+        console.log "stop the music by gpio"
+      when 1
+        Bell.play Bell.getFile Bell.nowBellId
+        console.log "start the music by gpio"
+      else
+        console.log "input the GPIO pin#{pin} parameter is out range[0,1]"
+
 else
-  console.log "This compuer is not Raspberry pi"
+  console.log "This computer is not Raspberry pi"
