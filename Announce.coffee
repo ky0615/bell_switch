@@ -6,19 +6,20 @@ spawn = require('child_process').spawn
 
 platform = process.platform
 
-class Bell
-
-  fileList: []
+class Announce
   stream: null
 
-  nowBellId: 0
+  fileList:
+    home:
+      arraival: []
+      departure: []
 
   play: (file)->
     @stop() if @stream
     if /^darwin/.test platform
       @stream = spawn "afplay", [file]
     else
-      @stream = spawn "aplay", [0..10].map -> file
+      @stream = spawn "aplay", [file]
 
   stop: ()->
     unless @stream
@@ -31,28 +32,31 @@ class Bell
     @stream = null
 
   getFileList: (cb)=>
-    fs.readdir './music', (err, files)=>
+    fs.readdir './announce/home_arraival', (err, files)=>
       throw err if err
-
       fileList = []
       files
         .filter (file)=>
           return /.*\.(wav|wave|mp3)$/.test file
         .forEach (file)=>
           fileList.push file
-      @fileList = fileList
-      if cb
-        cb fileList
+      @fileList.home.arraival = fileList
+      cb @fileList.home.arraival
+
+    fs.readdir './announce/home_departure', (err, files)=>
+      throw err if err
+      fileList = []
+      files
+        .filter (file)=>
+          return /.*\.(wav|wave|mp3)$/.test file
+        .forEach (file)=>
+          fileList.push file
+      @fileList.home.departure = fileList
+      cb @fileList.home.departure
 
   getFile: (id)=>
     return "./music/" + @fileList[id]
 
-  getFileType: (fileName)->
-    fileDecode = file.split(".")
-    fileLength = fileDecode.length
-    if fileLength == 0
-      return null
-    return fileDecode[fileDecode.length-1]
 
 
-module.exports = Bell
+module.exports = Announce

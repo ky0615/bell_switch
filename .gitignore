@@ -57,3 +57,7 @@ bower_components
 
 music/*
 !music/.gitkeep
+
+announce/*
+!announce/home_arraival/.gitkeep
+!announce/home_arraival/.gitkeep

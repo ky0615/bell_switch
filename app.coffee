@@ -11,6 +11,10 @@ Bell = new (require "./Bell")
 Bell.getFileList (files)->
   # console.log files
 
+Announce = new (require "./Announce")
+Announce.getFileList (file)->
+  console.log file
+
 static_base_path = path.join __dirname, 'www'
 app.use express.static static_base_path
 
