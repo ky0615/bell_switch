@@ -27,7 +27,6 @@ class Announce
       @play file
     , 500
 
-
   stop: ()->
     unless @stream
       return

@@ -26,16 +26,16 @@ app.get "/status", (req, res)->
 
 app.get "/start", (req, res)->
   Announce.stop()
-  if /^arm/.test process.arch
-    Bell.playDuration Bell.getFile Bell.nowBellId
-  else
-    Bell.play Bell.getFile Bell.nowBellId
+  Bell.play Bell.getFile Bell.nowBellId
   res.json
     status: 1
 
 app.get "/stop", (req, res)->
   if Bell.stop() and Announce.autoPlay
-    Announce.play Announce.getDepartureFile Announce.nowDID
+    if /^arm/.test process.arch
+      Announce.playDuration Announce.getDepartureFile Announce.nowDID
+    else
+      Announce.play Announce.getDepartureFile Announce.nowDID
   res.json
     status: 1
 
