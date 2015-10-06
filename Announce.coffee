@@ -20,7 +20,7 @@ class Announce
     if /^darwin/.test platform
       @stream = spawn "afplay", [file]
     else
-      @stream = spawn "aplay", ["-D plughw:0", file]
+      @stream = spawn "aplay", ["-D", "plughw:0", file]
 
   stop: ()->
     unless @stream

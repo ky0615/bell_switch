@@ -89,7 +89,8 @@ if /^arm/.test process.arch
     lastValue = nowValue
     switch nowValue
       when 0
-        Bell.stop()
+        if Bell.stop() and Announce.autoPlay
+          Announce.play Announce.getDepartureFile Announce.nowDID
         console.log "stop the music by gpio"
       when 1
         Bell.play Bell.getFile Bell.nowBellId
