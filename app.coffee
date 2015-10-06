@@ -26,7 +26,10 @@ app.get "/status", (req, res)->
 
 app.get "/start", (req, res)->
   Announce.stop()
-  Bell.play Bell.getFile Bell.nowBellId
+  if /^arm/.test process.arch
+    Bell.playDuration Bell.getFile Bell.nowBellId
+  else
+    Bell.play Bell.getFile Bell.nowBellId
   res.json
     status: 1
 
@@ -90,7 +93,7 @@ if /^arm/.test process.arch
     switch nowValue
       when 0
         if Bell.stop() and Announce.autoPlay
-          Announce.play Announce.getDepartureFile Announce.nowDID
+          Announce.playDuration Announce.getDepartureFile Announce.nowDID
         console.log "stop the music by gpio"
       when 1
         Bell.play Bell.getFile Bell.nowBellId

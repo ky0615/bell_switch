@@ -22,6 +22,12 @@ class Announce
     else
       @stream = spawn "aplay", ["-D", "plughw:0", file]
 
+  playDuration: (file)=>
+    setTimeout ()=>
+      @play file
+    , 500
+
+
   stop: ()->
     unless @stream
       return
