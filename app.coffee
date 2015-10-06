@@ -18,14 +18,21 @@ Announce.getFileList (file)->
 static_base_path = path.join __dirname, 'www'
 app.use express.static static_base_path
 
+app.get "/status", (req, res)->
+  res.json
+    bell_id: Bell.nowBellId
+    departure_id: Announce.nowDID
+    is_departure_auto_play: Announce.autoPlay
 
 app.get "/start", (req, res)->
+  Announce.stop()
   Bell.play Bell.getFile Bell.nowBellId
   res.json
     status: 1
 
 app.get "/stop", (req, res)->
-  Bell.stop()
+  if Bell.stop() and Announce.autoPlay
+    Announce.play Announce.getDepartureFile Announce.nowDID
   res.json
     status: 1
 
@@ -33,16 +40,30 @@ app.get "/list", (req, res)->
   Bell.getFileList (fileList)->
     res.json fileList
 
-app.get "/status", (req, res)->
-  res.json
-    bell_id: Bell.nowBellId
-
 app.post "/setbellid", (req, res)->
   Bell.nowBellId = req.body.id
   res.json
     status: 1
     result: "success"
     bell_id: Bell.nowBellId
+
+app.get "/departurelist", (req, res)->
+  Announce.getFileList (fileList)->
+    res.json Announce.departureFileList
+
+app.post "/setdepartureid", (req, res)->
+  Announce.nowDID = req.body.id
+  res.json
+    status: 1
+    result: "success"
+    bell_id: Announce.nowDID
+
+app.post "/toggledepartureautoplay", (req, res)->
+  Announce.autoPlay = req.body.id
+  res.json
+    status: 1
+    result: "success"
+    bell_id: Announce.autoPlay
 
 app.get "*", (req, res)->
   res.sendfile path.join static_base_path, "index.html"

@@ -4,3 +4,7 @@ angular.module "application"
       restrict: "AE"
       templateUrl: "parts/header.html"
     }
+
+.filter "dpath", ->
+  return (text)->
+    return text.split("/").slice(-1)[0]

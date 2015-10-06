@@ -9,10 +9,11 @@ platform = process.platform
 class Announce
   stream: null
 
-  fileList:
-    home:
-      arraival: []
-      departure: []
+  fileList: []
+  departureFileList: []
+  nowDID: 0
+
+  autoPlay: 1
 
   play: (file)->
     @stop() if @stream
@@ -32,31 +33,23 @@ class Announce
     @stream = null
 
   getFileList: (cb)=>
-    fs.readdir './announce/home_arraival', (err, files)=>
-      throw err if err
-      fileList = []
-      files
-        .filter (file)=>
-          return /.*\.(wav|wave|mp3)$/.test file
-        .forEach (file)=>
-          fileList.push file
-      @fileList.home.arraival = fileList
-      cb @fileList.home.arraival
-
-    fs.readdir './announce/home_departure', (err, files)=>
-      throw err if err
-      fileList = []
-      files
-        .filter (file)=>
-          return /.*\.(wav|wave|mp3)$/.test file
-        .forEach (file)=>
-          fileList.push file
-      @fileList.home.departure = fileList
-      cb @fileList.home.departure
+    @fileList = []
+    fs.readdirSync './announce'
+      .map (file)=> path.join "./announce", file
+      .filter (file)=> fs.statSync(file).isDirectory()
+      .forEach (dir)=>
+        fs.readdirSync dir
+          .filter (file)-> /.*\.(wav|wave|mp3)$/.test file
+          .map (file)-> path.join dir, file
+          .forEach (file)=>
+            @fileList.push file
+    @departureFileList = @fileList.filter (file)-> file.split("/")[1] is "home_departure"
+    cb @fileList
 
   getFile: (id)=>
-    return "./music/" + @fileList[id]
+    return @fileList[id]
 
-
+  getDepartureFile: (id)=>
+    return @departureFileList[id]
 
 module.exports = Announce

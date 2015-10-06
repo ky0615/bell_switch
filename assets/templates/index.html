@@ -7,7 +7,7 @@
   <div class="row">
   <div class="col-md-6 col-md-push-6">
       <div class="bs-docs-section">
-        <h1 class="page-header">操作盤</h1>
+        <h1 class="page-header toggle_title">操作盤</h1>
         <button type="button" class="btn btn-primary" ng-click="clickPlayBell()">
         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
         メロディ再生
@@ -20,7 +20,31 @@
     </div>
     <div class="col-md-6 col-md-pull-6">
       <div class="bs-docs-section">
-        <h1 class="page-header">再生するメロディを選択</h1>
+        <h1 class="page-header toggle_title" ng-click="isShowSelectDeparture = !isShowSelectDeparture">戸締め自動放送</h1>
+        <div class="btn-group text-center" role="group">
+          <button type="button" class="btn btn-default" ng-click="reloadDepartureList()">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            更新
+          </button>
+          <button type="button" class="btn btn-default" ng-click="departureRandomSelect()">
+            <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
+            ランダム
+          </button>
+          <button type="button" class="btn btn-primary" ng-change="toggleAutoPlayDeparture(autoPlayDeparture)" ng-model="autoPlayDeparture" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+            自動再生 ({{(autoPlayDeparture == 1)?'ON':'OFF'}})
+          </button>
+        </div>
+        <p>選択中のアナウンス: {{nowDeparturePlayingTitle|dpath}}</p>
+      </div>
+      <div class="list-group" collapse="isShowSelectDeparture">
+        <li class="list-group-item bell-list" ng-repeat="(key, name) in departureFiles" ng-click="setDeparture(key)">
+          <span class="glyphicon" ng-class="(nowDepartureId == key)?'glyphicon-play-circle': 'glyphicon-headphones'" aria-hidden="true"></span>
+          {{name|dpath}}
+        </li>
+      </div>
+      </div>
+      <div class="bs-docs-section">
+        <h1 class="page-header toggle_title" ng-click="isShowSelectMusic = !isShowSelectMusic">再生するメロディを選択</h1>
         <div class="btn-group text-center" role="group">
           <button type="button" class="btn btn-default" ng-click="reloadBellList()">
             <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
@@ -31,14 +55,15 @@
             ランダム選曲
           </button>
         </div>
-      <p>選択中のメロディ: {{nowPlayingTitle}}</p>
+        <p>選択中のメロディ: {{nowPlayingTitle}}</p>
       </div>
-      <div class="list-group">
+      <div class="list-group" collapse="isShowSelectMusic">
         <li class="list-group-item bell-list" ng-repeat="(key, name) in bellFiles" ng-click="setBell(key)">
           <span class="glyphicon" ng-class="(nowBellId == key)?'glyphicon-play-circle': 'glyphicon-headphones'" aria-hidden="true"></span>
           {{name}}
         </li>
       </div>
     </div>
+
   </div>
 </div>

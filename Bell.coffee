@@ -22,13 +22,14 @@ class Bell
 
   stop: ()->
     unless @stream
-      return
+      return false
     if /^darwin/.test platform
       exec "kill " + @stream.pid
     else
       @stream.kill "SIGTERM"
       @stream.emit "stop"
     @stream = null
+    return true
 
   getFileList: (cb)=>
     fs.readdir './music', (err, files)=>

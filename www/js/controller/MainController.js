@@ -5,7 +5,44 @@ angular.module('application').controller('MainController', [
   function ($rootScope, $scope, $http) {
     $scope.bellFiles = [];
     $scope.nowBellId = 0;
+    $scope.departureFiles = [];
+    $scope.nowDepartureId = 0;
+    $scope.autoPlayDeparture = 1;
+    $scope.isShowSelectMusic = true;
+    $scope.isShowSelectDeparture = false;
     $scope.nowPlayingTitle = '';
+    $scope.nowDeparturePlayingTitle = '';
+    $scope.getStatus = function () {
+    };
+    $scope.setDeparture = function (key) {
+      $scope.nowDepartureId = key;
+      $scope.nowDeparturePlayingTitle = $scope.departureFiles[key];
+      return $http.post('/setdepartureid', { id: key }).success(function (res, status) {
+        return console.log(res);
+      }).error(function (res, status) {
+      });
+    };
+    $scope.getDepartureList = function () {
+      return $http.get('/departurelist').success(function (res, status) {
+        return $scope.departureFiles = res;
+      }).error(function (res, status) {
+      });
+    };
+    $scope.clickPlayDeparture = function () {
+    };
+    $scope.clickStopDeparture = function () {
+    };
+    $scope.reloadDepartureList = function () {
+      return $scope.getDepartureList();
+    };
+    $scope.departureRandomSelect = function () {
+      return $scope.setDeparture(Math.floor(Math.random() * $scope.departureFiles.length));
+    };
+    $scope.toggleAutoPlayDeparture = function (toggle) {
+      if (toggle === 1) {
+      } else {
+      }
+    };
     $scope.setBell = function (key) {
       $scope.nowBellId = key;
       $scope.nowPlayingTitle = $scope.bellFiles[key];
@@ -46,6 +83,7 @@ angular.module('application').controller('MainController', [
     $scope.bellRandomSelect = function () {
       return $scope.setBell(Math.floor(Math.random() * $scope.bellFiles.length));
     };
+    $scope.reloadDepartureList();
     return $scope.reloadBellList();
   }
 ]);

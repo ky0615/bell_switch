@@ -3,3 +3,9 @@
 li.bell-list span.glyphicon {
   padding-right: 1em;
 }
+
+h1.toggle_title {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
