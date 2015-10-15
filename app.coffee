@@ -15,6 +15,8 @@ Announce = new (require "./Announce")
 Announce.getFileList (file)->
   console.log file
 
+Buzzer = new (require "./Buzzer")
+
 static_base_path = path.join __dirname, 'www'
 app.use express.static static_base_path
 
@@ -68,29 +70,60 @@ app.post "/toggledepartureautoplay", (req, res)->
     result: "success"
     bell_id: Announce.autoPlay
 
+app.get "/buzzer/:param", (req, res)->
+  switch req.param("param")
+    when "start"
+      console.log "start buzzer. caused by API"
+      Buzzer.play()
+    when "stop"
+      Buzzer.stop()
+      console.log "stop buzzer. caused by API"
+
+  res.json
+    status: 1
+    result: "success"
+
+app.get /^\/(js|css|min)\/(.*)/, (req, res)->
+  res.send "404 Not found", 404
+
 app.get "*", (req, res)->
   res.sendfile path.join static_base_path, "index.html"
   return
 server = app.listen 1451, ->
   console.log server.address()
 
-lastValue = 0
-nowValue = 0
+bell =
+  lastValue : 0
+  nowValue  : 0
+buzzer =
+  lastValue : 0
+  nowValue  : 0
+
 
 if /^arm/.test process.arch
-  pin = 21
+  bell_pin = 21
+  buzzer_pin = 20
+
   console.log "enable the raspberry pi's gpio"
-  console.log "read pin is " + pin
+  console.log "read pin is #{bell_pin}, #{buzzer_pin}"
   gpio = require("onoff").Gpio
-  button = new gpio pin, 'in', 'both'
-  button.watch (err, value)->
+
+  bell_button = new gpio bell_pin, 'in', 'both'
+  bell_button.watch (err, value)->
     console.log err if err
-    nowValue = value
+    bell.nowValue = value
+
+  buzzer_button = new gpio buzzer_pin, 'in', 'both'
+  buzzer_button.watch (err, value)->
+    console.log err if err
+    buzzer.nowValue = value
+
   setInterval ->
-    if nowValue is lastValue
+    if bell.nowValue is bell.lastValue
       return
-    lastValue = nowValue
-    switch nowValue
+    bell.lastValue = bell.nowValue
+    buzzer.lastValue = buzzer.nowValue
+    switch bell.nowValue
       when 0
         if Bell.stop() and Announce.autoPlay
           Announce.playDuration Announce.getDepartureFile Announce.nowDID
@@ -99,7 +132,17 @@ if /^arm/.test process.arch
         Bell.play Bell.getFile Bell.nowBellId
         console.log "start the music by gpio"
       else
-        console.log "input the GPIO pin#{pin} parameter is out range[0,1]"
+        console.log "input the GPIO pin: #{bell_pin} parameter is out range[0,1]"
+
+    switch buzzer.nowValue
+      when 0
+        Buzzer.stop()
+        console.log "stop the buzzer by gpio"
+      when 1
+        Buzzer.play()
+        console.log "start the buzzer by gpio"
+      else
+        console.log "input the GPIO pin: #{buzzer_pin} parameter is out range[0,1]"
   , 200
 else
   console.log "This computer is not Raspberry pi"

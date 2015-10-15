@@ -17,6 +17,7 @@
     "coffee-script": "^1.8.0",
     "colors": "^1.0.2",
     "express": "^4.10.6",
+    "node-sass": "^3.3.3",
     "onoff": "^1.0.2"
   },
   "devDependencies": {
