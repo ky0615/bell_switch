@@ -122,7 +122,6 @@ if /^arm/.test process.arch
     if bell.nowValue is bell.lastValue
       return
     bell.lastValue = bell.nowValue
-    buzzer.lastValue = buzzer.nowValue
     switch bell.nowValue
       when 0
         if Bell.stop() and Announce.autoPlay
@@ -133,7 +132,12 @@ if /^arm/.test process.arch
         console.log "start the music by gpio"
       else
         console.log "input the GPIO pin: #{bell_pin} parameter is out range[0,1]"
+  , 200
 
+  setInterval ->
+    if buzzer.nowValue is buzzer.lastValue
+      return
+    buzzer.lastValue = buzzer.nowValue
     switch buzzer.nowValue
       when 0
         Buzzer.stop()
@@ -143,6 +147,6 @@ if /^arm/.test process.arch
         console.log "start the buzzer by gpio"
       else
         console.log "input the GPIO pin: #{buzzer_pin} parameter is out range[0,1]"
-  , 200
+  , 800
 else
   console.log "This computer is not Raspberry pi"
