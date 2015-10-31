@@ -54,6 +54,12 @@ class Announce
   getFile: (id)=>
     return @fileList[id]
 
+  getFIleId: (file)=>
+    for k, v of @departureFileList
+      if v is file
+        return k
+    return -1
+
   getDepartureFile: (id)=>
     return @departureFileList[id]
 

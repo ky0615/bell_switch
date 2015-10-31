@@ -7,6 +7,7 @@ app = express()
 bodyParser = require "body-parser"
 app.use bodyParser()
 
+config = require 'config'
 Bell = new (require "./Bell")
 Bell.getFileList (files)->
   # console.log files
@@ -82,6 +83,34 @@ app.get "/buzzer/:param", (req, res)->
   res.json
     status: 1
     result: "success"
+
+
+app.get "/bell_set/:param", (req, res)->
+  param = Math.floor req.param "param"
+  unless param < config.bell_set.length
+    res.json
+      status: -1
+      result: "id is not defined"
+    return
+  conf_path = config.bell_set[param]
+  a_id = Announce.getFIleId "announce/home_departure/" + conf_path.file[0]
+  b_id = Bell.getFIleId conf_path.file[1]
+
+  if b_id isnt -1 and a_id isnt -1
+    Announce.nowDID = a_id
+    Bell.nowBellId = b_id
+  else
+    console.log "error"
+
+  conf_path.id = [a_id,b_id]
+  res.json
+      status: 1
+      result: "success"
+      path: conf_path
+
+app.get "/bell_set", (req, res)->
+  res.json config.bell_set
+
 
 app.get /^\/(js|css|min)\/(.*)/, (req, res)->
   res.send "404 Not found", 404

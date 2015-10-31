@@ -1,5 +1,7 @@
 angular.module "application"
   .controller "MainController", ($rootScope, $scope, $http)->
+    $scope.bellSetFiles = []
+
     $scope.bellFiles = []
     $scope.nowBellId = 0
 
@@ -7,24 +9,41 @@ angular.module "application"
     $scope.nowDepartureId = 0
     $scope.autoPlayDeparture = 1
 
+    $scope.isShowSelectBellSet = false
     $scope.isShowSelectMusic = true
-    $scope.isShowSelectDeparture = false
+    $scope.isShowSelectDeparture = true
 
     $scope.nowPlayingTitle = ""
     $scope.nowDeparturePlayingTitle = ""
+
+    $scope.getBellSet = ->
+      $http.get "/bell_set"
+        .success (res, status)->
+          $scope.bellSetFiles = res
+          $scope.getStatus()
+
+    $scope.setBellSet = (id)->
+      $http.get "/bell_set/#{id}"
+        .success (res, status)->
+          console.log res
+          $scope.getStatus()
+
+    $scope.bellsetRandomSelect = ->
+      $scope.setBellSet Math.floor Math.random() * $scope.bellSetFiles.length
 
     $scope.setDeparture = (key)->
       $scope.nowDepartureId = key
       $scope.nowDeparturePlayingTitle = $scope.departureFiles[key]
       $http.post "/setdepartureid", id: key
         .success (res, status)->
-          console.log res
+          $scope.getStatus()
         .error (res, status)->
 
     $scope.getDepartureList = ->
       $http.get "/departurelist"
         .success (res, status)->
           $scope.departureFiles = res
+          $scope.getStatus()
         .error (res, status)->
 
     $scope.clickPlayDeparture = ->
@@ -49,13 +68,14 @@ angular.module "application"
       $scope.nowPlayingTitle = $scope.bellFiles[key]
       $http.post "/setbellid", id: key
         .success (res, status)->
-          console.log res
+          $scope.getStatus()
         .error (res, status)->
 
     $scope.getBellList = ->
       $http.get "/list"
         .success (res, status)->
           $scope.bellFiles = res
+          $scope.getStatus()
         .error (res, status)->
 
     $scope.getNowBellId = ->
@@ -68,13 +88,13 @@ angular.module "application"
     $scope.clickPlayBell = ->
       $http.get "/start"
         .success (res, status)->
-          console.log res
+          $scope.getStatus()
         .error (res, status)->
 
     $scope.clickStopBell = ->
       $http.get "/stop"
         .success (res, status)->
-          console.log res
+          $scope.getStatus()
         .error (res, status)->
 
     $scope.reloadBellList = ->
@@ -95,6 +115,7 @@ angular.module "application"
 
     $scope.reloadDepartureList()
     $scope.reloadBellList()
+    $scope.getBellSet()
 
-    setInterval $scope.getStatus, 1000
+    $scope.getStatus()
     return

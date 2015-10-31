@@ -48,6 +48,12 @@ class Bell
   getFile: (id)=>
     return "./music/" + @fileList[id]
 
+  getFIleId: (file)=>
+    for k, v of @fileList
+      if v is file
+        return k
+    return -1
+
   getFileType: (fileName)->
     fileDecode = file.split(".")
     fileLength = fileDecode.length

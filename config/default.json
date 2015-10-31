@@ -1,4 +1,18 @@
 {
   "config_name": "default",
-  "buzzer_sound": "./music/営団ブザー１０分耐久.wav"
+  "buzzer_sound": "./music/営団ブザー１０分耐久.wav",
+  "bell_set":[
+    {
+      "name":"北千住 1番線",
+      "file":["1番　男.wav", "北千住1番.wav"]
+    },
+    {
+      "name":"北千住 2番線",
+      "file":["2番　男.wav", "北千住2番.wav"]
+    },
+    {
+      "name":"北千住 3番線",
+      "file":["3番　女.wav", "北千住3番.wav"]
+    }
+  ]
 }

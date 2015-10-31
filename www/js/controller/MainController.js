@@ -3,26 +3,44 @@ angular.module('application').controller('MainController', [
   '$scope',
   '$http',
   function ($rootScope, $scope, $http) {
+    $scope.bellSetFiles = [];
     $scope.bellFiles = [];
     $scope.nowBellId = 0;
     $scope.departureFiles = [];
     $scope.nowDepartureId = 0;
     $scope.autoPlayDeparture = 1;
+    $scope.isShowSelectBellSet = false;
     $scope.isShowSelectMusic = true;
-    $scope.isShowSelectDeparture = false;
+    $scope.isShowSelectDeparture = true;
     $scope.nowPlayingTitle = '';
     $scope.nowDeparturePlayingTitle = '';
+    $scope.getBellSet = function () {
+      return $http.get('/bell_set').success(function (res, status) {
+        $scope.bellSetFiles = res;
+        return $scope.getStatus();
+      });
+    };
+    $scope.setBellSet = function (id) {
+      return $http.get('/bell_set/' + id).success(function (res, status) {
+        console.log(res);
+        return $scope.getStatus();
+      });
+    };
+    $scope.bellsetRandomSelect = function () {
+      return $scope.setBellSet(Math.floor(Math.random() * $scope.bellSetFiles.length));
+    };
     $scope.setDeparture = function (key) {
       $scope.nowDepartureId = key;
       $scope.nowDeparturePlayingTitle = $scope.departureFiles[key];
       return $http.post('/setdepartureid', { id: key }).success(function (res, status) {
-        return console.log(res);
+        return $scope.getStatus();
       }).error(function (res, status) {
       });
     };
     $scope.getDepartureList = function () {
       return $http.get('/departurelist').success(function (res, status) {
-        return $scope.departureFiles = res;
+        $scope.departureFiles = res;
+        return $scope.getStatus();
       }).error(function (res, status) {
       });
     };
@@ -45,13 +63,14 @@ angular.module('application').controller('MainController', [
       $scope.nowBellId = key;
       $scope.nowPlayingTitle = $scope.bellFiles[key];
       return $http.post('/setbellid', { id: key }).success(function (res, status) {
-        return console.log(res);
+        return $scope.getStatus();
       }).error(function (res, status) {
       });
     };
     $scope.getBellList = function () {
       return $http.get('/list').success(function (res, status) {
-        return $scope.bellFiles = res;
+        $scope.bellFiles = res;
+        return $scope.getStatus();
       }).error(function (res, status) {
       });
     };
@@ -64,13 +83,13 @@ angular.module('application').controller('MainController', [
     };
     $scope.clickPlayBell = function () {
       return $http.get('/start').success(function (res, status) {
-        return console.log(res);
+        return $scope.getStatus();
       }).error(function (res, status) {
       });
     };
     $scope.clickStopBell = function () {
       return $http.get('/stop').success(function (res, status) {
-        return console.log(res);
+        return $scope.getStatus();
       }).error(function (res, status) {
       });
     };
@@ -92,6 +111,7 @@ angular.module('application').controller('MainController', [
     };
     $scope.reloadDepartureList();
     $scope.reloadBellList();
-    setInterval($scope.getStatus, 1000);
+    $scope.getBellSet();
+    $scope.getStatus();
   }
 ]);
