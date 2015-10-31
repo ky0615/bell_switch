@@ -1,0 +1,11 @@
+{
+  apps : [
+    {
+      name      : "main_app",
+      script    : "app.coffee",
+      env: {
+        HOST: "pi"
+      }
+    }
+  ]
+}

@@ -1,14 +1,16 @@
 fs = require "fs"
 path = require 'path'
 
+config = require 'config'
+
 exec = require('child_process').exec
 spawn = require('child_process').spawn
 
 platform = process.platform
-
+console.log config
 class Buzzer
   stream: null
-  sound: "./music/営団ブザー１０分耐久.wav"
+  sound: config.buzzer_sound
 
   play: ()=>
     @stop() if @stream
@@ -39,8 +41,5 @@ class Buzzer
 
   isFile: (callback)->
     fs.exists @sound, callback
-
-
-
 
 module.exports = Buzzer
