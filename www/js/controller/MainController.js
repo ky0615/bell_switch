@@ -12,8 +12,6 @@ angular.module('application').controller('MainController', [
     $scope.isShowSelectDeparture = false;
     $scope.nowPlayingTitle = '';
     $scope.nowDeparturePlayingTitle = '';
-    $scope.getStatus = function () {
-    };
     $scope.setDeparture = function (key) {
       $scope.nowDepartureId = key;
       $scope.nowDeparturePlayingTitle = $scope.departureFiles[key];
@@ -83,7 +81,17 @@ angular.module('application').controller('MainController', [
     $scope.bellRandomSelect = function () {
       return $scope.setBell(Math.floor(Math.random() * $scope.bellFiles.length));
     };
+    $scope.getStatus = function () {
+      return $http.get('/status').success(function (res, status) {
+        console.log(res);
+        $scope.nowBellId = res.bell_id;
+        $scope.nowDepartureId = res.departure_id;
+        $scope.nowPlayingTitle = $scope.bellFiles[res.bell_id];
+        return $scope.nowDeparturePlayingTitle = $scope.departureFiles[res.departure_id];
+      });
+    };
     $scope.reloadDepartureList();
-    return $scope.reloadBellList();
+    $scope.reloadBellList();
+    setInterval($scope.getStatus, 1000);
   }
 ]);

@@ -13,9 +13,6 @@ angular.module "application"
     $scope.nowPlayingTitle = ""
     $scope.nowDeparturePlayingTitle = ""
 
-    $scope.getStatus = ->
-      
-
     $scope.setDeparture = (key)->
       $scope.nowDepartureId = key
       $scope.nowDeparturePlayingTitle = $scope.departureFiles[key]
@@ -87,6 +84,17 @@ angular.module "application"
     $scope.bellRandomSelect = ->
       $scope.setBell Math.floor Math.random() * $scope.bellFiles.length
 
+    $scope.getStatus = ->
+      $http.get "/status"
+        .success (res, status)->
+          console.log res
+          $scope.nowBellId = res.bell_id
+          $scope.nowDepartureId = res.departure_id
+          $scope.nowPlayingTitle = $scope.bellFiles[res.bell_id]
+          $scope.nowDeparturePlayingTitle = $scope.departureFiles[res.departure_id]
 
     $scope.reloadDepartureList()
     $scope.reloadBellList()
+
+    setInterval $scope.getStatus, 1000
+    return
