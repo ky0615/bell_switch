@@ -132,7 +132,7 @@ if /^arm/.test process.arch
         console.log "start the music by gpio"
       else
         console.log "input the GPIO pin: #{bell_pin} parameter is out range[0,1]"
-  , 200
+  , 30
 
   setInterval ->
     if buzzer.nowValue is buzzer.lastValue
@@ -147,6 +147,6 @@ if /^arm/.test process.arch
         console.log "start the buzzer by gpio"
       else
         console.log "input the GPIO pin: #{buzzer_pin} parameter is out range[0,1]"
-  , 800
+  , 10
 else
   console.log "This computer is not Raspberry pi"
