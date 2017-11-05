@@ -40,11 +40,11 @@
     },
     {
       "name":"八丁堀 1番線(京葉線)",
-      "file":["1番　京葉線.wav", "Verde Rayo V2.wav"]
+      "file":["PRC型京葉女-①.wav", "Verde Rayo V2.wav"]
     },
     {
       "name":"舞浜 1番線(京葉線) 2013年ver.",
-      "file":["1番　京葉線.wav", "舞浜2013年ver.wav"]
+      "file":["PRC型京葉女-①.wav", "舞浜2013年ver.wav"]
     },
     {
       "name":"松戸駅 1番線",
@@ -69,6 +69,14 @@
     {
       "name":"松戸駅 6番線",
       "file":["6番　女.wav", "SF22-14.wav"]
+    },
+    {
+      "name":"高田馬場駅 1番線",
+      "file":["1番　男.wav", "鉄腕アトムa.wav"]
+    },
+    {
+      "name":"高田馬場駅 2番線",
+      "file":["2番　女.wav", "鉄腕アトムb.wav"]
     }
   ]
 }
